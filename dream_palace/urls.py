@@ -5,11 +5,14 @@ from django.views.static import serve as serve_static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/", include("accounts.urls")),
-    path("api/", include("listings.urls")),
-    path("api/", include("bookings.urls")),
-    path("api/", include("payments.urls")),
-    path("api/", include("messaging.urls")),
+    path("api/bookings", include("accounts.urls")),
+    path("api/media", include("listings.urls")),
+    path("api/listings", include("bookings.urls")),
+    path("api/payments", include("payments.urls")),
+    path("api/messaging", include("messaging.urls")),
+    path("api/accounts", include("accounts.urls")),
+    path("api/payments", include("payments.urls")),
+    path("api/messaging", include("messaging.urls")),
 ]
 
 # Serve uploaded house/menu/product photos at /static/images/<filename>
