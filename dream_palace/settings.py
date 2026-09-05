@@ -155,16 +155,7 @@ REST_FRAMEWORK = {
 # ============================================================
 # ✅ CORS — ALLOW ALL ORIGINS (TEMP FIX)
 # ============================================================
-# TEMPORARY: Allow all origins while debugging
-CORS_ALLOW_ALL_ORIGINS = True
-
-# PERMANENT (when ready): Uncomment below and use this instead
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:3000",
-#     "http://localhost:5173",
-#     "https://ryacksonfungo.alwaysdata.net",
-# ]
-
+CORS_ALLOW_ALL_ORIGINS = True  # ← DISABLES ALL CORS CHECKS
 CORS_ALLOW_CREDENTIALS = True
 
 # ============================================================
