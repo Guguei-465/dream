@@ -7,7 +7,9 @@ import os
 import importlib
 from pathlib import Path
 
-# ✅ PyMySQL for MySQL connection
+# ============================================================
+# PyMySQL for MySQL connection
+# ============================================================
 try:
     pymysql = importlib.import_module("pymysql")
     pymysql.install_as_MySQLdb()
@@ -16,7 +18,9 @@ except ImportError:
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# ✅ Load .env file (for local dev; AlwaysData uses panel vars)
+# ============================================================
+# LOAD ENVIRONMENT VARIABLES
+# ============================================================
 try:
     from dotenv import load_dotenv
     load_dotenv(BASE_DIR / ".env")
@@ -61,11 +65,11 @@ INSTALLED_APPS = [
 ]
 
 # ============================================================
-# ✅ MIDDLEWARE — CORS MUST BE 2ND!
+# ✅ MIDDLEWARE — CORS FIRST, NO DUPLICATES!
 # ============================================================
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",  # ← FIRST — ONLY ONCE!
     "django.middleware.security.SecurityMiddleware",
-    "corsheaders.middleware.CorsMiddleware",  # ← KEEP HERE!
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -101,34 +105,16 @@ TEMPLATES = [
 ]
 
 # ============================================================
-# ✅ DATABASE — AlwaysData MySQL (FALLBACKS HARDCODED)
+# DATABASE — AlwaysData MySQL
 # ============================================================
 DATABASES = {
     "default": {
-        "ENGINE": env(
-            "DB_ENGINE",
-            "django.db.backends.mysql"
-        ),
-        "NAME": env(
-            "DB_NAME",
-            "ryacksonfungo_dream"
-        ),
-        "USER": env(
-            "DB_USER",
-            "ryacksonfungo"
-        ),
-        "PASSWORD": env(
-            "DB_PASSWORD",
-            "modcom2026"
-        ),
-        "HOST": env(
-            "DB_HOST",
-            "mysql-ryacksonfungo.alwaysdata.net"
-        ),
-        "PORT": env(
-            "DB_PORT",
-            "3306"
-        ),
+        "ENGINE": env("DB_ENGINE", "django.db.backends.mysql"),
+        "NAME": env("DB_NAME", "ryacksonfungo_dream"),
+        "USER": env("DB_USER", "ryacksonfungo"),
+        "PASSWORD": env("DB_PASSWORD", "modcom2026"),
+        "HOST": env("DB_HOST", "mysql-ryacksonfungo.alwaysdata.net"),
+        "PORT": env("DB_PORT", "3306"),
     }
 }
 
@@ -137,22 +123,10 @@ DATABASES = {
 # ============================================================
 AUTH_USER_MODEL = "accounts.User"
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME":
-        "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
-    },
-    {
-        "NAME":
-        "django.contrib.auth.password_validation.MinimumLengthValidator"
-    },
-    {
-        "NAME":
-        "django.contrib.auth.password_validation.CommonPasswordValidator"
-    },
-    {
-        "NAME":
-        "django.contrib.auth.password_validation.NumericPasswordValidator"
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 # ============================================================
@@ -186,16 +160,19 @@ REST_FRAMEWORK = {
 }
 
 # ============================================================
-# ✅ CORS — ALLOW ALL ORIGINS (TEMP FIX — DISABLES ALL CORS)
+# ✅ CORS — EXPLICITLY ALLOW PORT 1573
 # ============================================================
-CORS_ALLOW_ALL_ORIGINS = True  # ← NOTHING CAN BLOCK REQUESTS NOW
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:1573",    # ✅ YOUR LUMA PORT
+    "http://localhost:5173",    # Vite fallback
+]
 CORS_ALLOW_CREDENTIALS = True
 
 # ============================================================
-# ✅ CSRF — Trust ALL your domains
+# ✅ CSRF — TRUST ALL YOUR DOMAINS
 # ============================================================
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:3000",
+    "http://localhost:1573",
     "http://localhost:5173",
     "http://ryacksonfungo.alwaysdata.net",
     "https://ryacksonfungo.alwaysdata.net",
