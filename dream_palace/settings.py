@@ -16,7 +16,7 @@ except ImportError:
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# ✅ Load .env file
+# ✅ Load .env file (for local dev; AlwaysData uses panel vars)
 try:
     from dotenv import load_dotenv
     load_dotenv(BASE_DIR / ".env")
@@ -29,7 +29,10 @@ def env(key, default=None):
 # ============================================================
 # CORE SETTINGS
 # ============================================================
-SECRET_KEY = env("DJANGO_SECRET_KEY", "insecure-dev-key-change-me")
+SECRET_KEY = env(
+    "DJANGO_SECRET_KEY",
+    "insecure-dev-key-change-me-to-a-real-secret"
+)
 DEBUG = env("DJANGO_DEBUG", "True") == "True"
 ALLOWED_HOSTS = [
     h.strip()
@@ -50,7 +53,6 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
-    
     "accounts",
     "listings",
     "bookings",
@@ -99,16 +101,34 @@ TEMPLATES = [
 ]
 
 # ============================================================
-# ✅ DATABASE — AlwaysData MySQL
+# ✅ DATABASE — AlwaysData MySQL (FALLBACKS HARDCODED)
 # ============================================================
 DATABASES = {
     "default": {
-        "ENGINE": env("DB_ENGINE", "django.db.backends.mysql"),
-        "NAME": env("DB_NAME", "ryacksonfungo_dream"),
-        "USER": env("DB_USER", "ryacksonfungo"),
-        "PASSWORD": env("DB_PASSWORD", "modcom2026"),
-        "HOST": env("DB_HOST", "mysql-ryacksonfungo.alwaysdata.net"),
-        "PORT": env("DB_PORT", "3306"),
+        "ENGINE": env(
+            "DB_ENGINE",
+            "django.db.backends.mysql"
+        ),
+        "NAME": env(
+            "DB_NAME",
+            "ryacksonfungo_dream"
+        ),
+        "USER": env(
+            "DB_USER",
+            "ryacksonfungo"
+        ),
+        "PASSWORD": env(
+            "DB_PASSWORD",
+            "modcom2026"
+        ),
+        "HOST": env(
+            "DB_HOST",
+            "mysql-ryacksonfungo.alwaysdata.net"
+        ),
+        "PORT": env(
+            "DB_PORT",
+            "3306"
+        ),
     }
 }
 
@@ -117,10 +137,22 @@ DATABASES = {
 # ============================================================
 AUTH_USER_MODEL = "accounts.User"
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+    {
+        "NAME":
+        "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
+    {
+        "NAME":
+        "django.contrib.auth.password_validation.MinimumLengthValidator"
+    },
+    {
+        "NAME":
+        "django.contrib.auth.password_validation.CommonPasswordValidator"
+    },
+    {
+        "NAME":
+        "django.contrib.auth.password_validation.NumericPasswordValidator"
+    },
 ]
 
 # ============================================================
@@ -154,9 +186,9 @@ REST_FRAMEWORK = {
 }
 
 # ============================================================
-# ✅ CORS — ALLOW ALL ORIGINS (TEMP FIX)
+# ✅ CORS — ALLOW ALL ORIGINS (TEMP FIX — DISABLES ALL CORS)
 # ============================================================
-CORS_ALLOW_ALL_ORIGINS = True  # ← DISABLES ALL CORS CHECKS
+CORS_ALLOW_ALL_ORIGINS = True  # ← NOTHING CAN BLOCK REQUESTS NOW
 CORS_ALLOW_CREDENTIALS = True
 
 # ============================================================
@@ -177,13 +209,19 @@ MPESA_CONSUMER_KEY = env("MPESA_CONSUMER_KEY", "")
 MPESA_CONSUMER_SECRET = env("MPESA_CONSUMER_SECRET", "")
 MPESA_SHORTCODE = env("MPESA_SHORTCODE", "174379")
 MPESA_PASSKEY = env("MPESA_PASSKEY", "")
-MPESA_CALLBACK_URL = env("MPESA_CALLBACK_URL", "https://ryacksonfungo.alwaysdata.net/api/mpesa/callback/")
+MPESA_CALLBACK_URL = env(
+    "MPESA_CALLBACK_URL",
+    "https://ryacksonfungo.alwaysdata.net/api/mpesa/callback/"
+)
 BOOKING_HOLD_MINUTES = int(env("BOOKING_HOLD_MINUTES", "15"))
 
 # ============================================================
 # EMAIL
 # ============================================================
-EMAIL_BACKEND = env("EMAIL_BACKEND", "django.core.mail.backends.smtp.EmailBackend")
+EMAIL_BACKEND = env(
+    "EMAIL_BACKEND",
+    "django.core.mail.backends.smtp.EmailBackend"
+)
 EMAIL_HOST = env("EMAIL_HOST", "smtp.gmail.com")
 EMAIL_PORT = int(env("EMAIL_PORT", "587"))
 EMAIL_HOST_USER = env("EMAIL_HOST_USER", "")
