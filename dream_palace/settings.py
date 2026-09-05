@@ -141,7 +141,7 @@ DATABASES = {
         ),
         "PASSWORD": env(
             "DB_PASSWORD",
-            ""
+            "modcom2026"
         ),
         "HOST": env(
             "DB_HOST",
