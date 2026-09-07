@@ -110,10 +110,10 @@ TEMPLATES = [
 DATABASES = {
     "default": {
         "ENGINE": env("DB_ENGINE", "django.db.backends.mysql"),
-        "NAME": env("DB_NAME", "ryacksonfungo_dream"),
-        "USER": env("DB_USER", "ryacksonfungo"),
+        "NAME": env("DB_NAME", "ryackson_dream"),
+        "USER": env("DB_USER", "ryackson"),
         "PASSWORD": env("DB_PASSWORD", "modcom2026"),
-        "HOST": env("DB_HOST", "mysql-ryacksonfungo.alwaysdata.net"),
+        "HOST": env("DB_HOST", "mysql-ryackson.alwaysdata.net"),
         "PORT": env("DB_PORT", "3306"),
     }
 }
@@ -174,8 +174,8 @@ CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:1573",
     "http://localhost:5173",
-    "http://ryacksonfungo.alwaysdata.net",
-    "https://ryacksonfungo.alwaysdata.net",
+    "http://ryackson.alwaysdata.net",
+    "https://ryackson.alwaysdata.net",
 ]
 
 # ============================================================
