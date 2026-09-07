@@ -3,50 +3,63 @@ Django settings for the Dream Palace backend.
 Secrets and environment-specific values are read from environment
 variables. Never commit real secrets.
 """
+
 import os
 import importlib
 from pathlib import Path
 
+
 # ============================================================
 # PyMySQL for MySQL connection
 # ============================================================
+
 try:
     pymysql = importlib.import_module("pymysql")
     pymysql.install_as_MySQLdb()
 except ImportError:
     pymysql = None
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 # ============================================================
 # LOAD ENVIRONMENT VARIABLES
 # ============================================================
+
 try:
     from dotenv import load_dotenv
     load_dotenv(BASE_DIR / ".env")
 except ImportError:
     pass
 
+
 def env(key, default=None):
     return os.environ.get(key, default)
+
 
 # ============================================================
 # CORE SETTINGS
 # ============================================================
+
 SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
     "insecure-dev-key-change-me-to-a-real-secret"
 )
+
 DEBUG = env("DJANGO_DEBUG", "True") == "True"
+
 ALLOWED_HOSTS = [
     h.strip()
     for h in env("DJANGO_ALLOWED_HOSTS", "*").split(",")
     if h.strip()
 ]
 
+
 # ============================================================
 # INSTALLED APPS
 # ============================================================
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -54,9 +67,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
     "rest_framework",
     "rest_framework.authtoken",
+
     "corsheaders",
+
     "accounts",
     "listings",
     "bookings",
@@ -64,11 +80,15 @@ INSTALLED_APPS = [
     "messaging",
 ]
 
+
 # ============================================================
-# ✅ MIDDLEWARE — CORS FIRST, NO DUPLICATES!
+# MIDDLEWARE
 # ============================================================
+
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",  # ← FIRST — ONLY ONCE!
+    # CORS middleware must be near the top
+    "corsheaders.middleware.CorsMiddleware",
+
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -78,16 +98,22 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+
 # ============================================================
 # URL / APPLICATION
 # ============================================================
-ROOT_URLCONF = "dream_palace.urls"
-WSGI_APPLICATION = "dream_palace.wsgi.application"
-ASGI_APPLICATION = "dream_palace.asgi.application"
+
+ROOT_URLCONF = "dream_palace_backend.urls"
+
+WSGI_APPLICATION = "dream_palace_backend.wsgi.application"
+
+ASGI_APPLICATION = "dream_palace_backend.asgi.application"
+
 
 # ============================================================
 # TEMPLATES
 # ============================================================
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -104,51 +130,101 @@ TEMPLATES = [
     },
 ]
 
+
 # ============================================================
 # DATABASE — AlwaysData MySQL
 # ============================================================
+
 DATABASES = {
     "default": {
-        "ENGINE": env("DB_ENGINE", "django.db.backends.mysql"),
-        "NAME": env("DB_NAME", "ryackson_dream"),
-        "USER": env("DB_USER", "ryackson"),
-        "PASSWORD": env("DB_PASSWORD", "modcom2026"),
-        "HOST": env("DB_HOST", "mysql-ryackson.alwaysdata.net"),
-        "PORT": env("DB_PORT", "3306"),
+        "ENGINE": env(
+            "DB_ENGINE",
+            "django.db.backends.mysql"
+        ),
+        "NAME": env(
+            "DB_NAME",
+            "ryackson_dream"
+        ),
+        "USER": env(
+            "DB_USER",
+            "ryackson"
+        ),
+        "PASSWORD": env(
+            "DB_PASSWORD",
+            "modcom2026"
+        ),
+        "HOST": env(
+            "DB_HOST",
+            "mysql-ryackson.alwaysdata.net"
+        ),
+        "PORT": env(
+            "DB_PORT",
+            "3306"
+        ),
     }
 }
+
 
 # ============================================================
 # AUTHENTICATION
 # ============================================================
+
 AUTH_USER_MODEL = "accounts.User"
+
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+    {
+        "NAME":
+        "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
+    {
+        "NAME":
+        "django.contrib.auth.password_validation.MinimumLengthValidator"
+    },
+    {
+        "NAME":
+        "django.contrib.auth.password_validation.CommonPasswordValidator"
+    },
+    {
+        "NAME":
+        "django.contrib.auth.password_validation.NumericPasswordValidator"
+    },
 ]
+
 
 # ============================================================
 # INTERNATIONALIZATION
 # ============================================================
+
 LANGUAGE_CODE = "en-us"
-TIME_ZONE = env("DJANGO_TIME_ZONE", "Africa/Nairobi")
+
+TIME_ZONE = env(
+    "DJANGO_TIME_ZONE",
+    "Africa/Nairobi"
+)
+
 USE_I18N = True
 USE_TZ = True
+
 
 # ============================================================
 # STATIC / MEDIA
 # ============================================================
+
 STATIC_URL = "static-assets/"
+
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
 MEDIA_URL = "/static/images/"
+
 MEDIA_ROOT = BASE_DIR / "media" / "images"
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
 
 # ============================================================
 # DJANGO REST FRAMEWORK
 # ============================================================
+
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
@@ -159,18 +235,23 @@ REST_FRAMEWORK = {
     ],
 }
 
-# ============================================================
-# ✅ CORS — EXPLICITLY ALLOW PORT 1573
-# ============================================================
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:1573",    # ✅ YOUR LUMA PORT
-    "http://localhost:5173",    # Vite fallback
-]
-CORS_ALLOW_CREDENTIALS = True
 
 # ============================================================
-# ✅ CSRF — TRUST ALL YOUR DOMAINS
+# CORS
 # ============================================================
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:1573",
+    "http://localhost:5173",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+
+# ============================================================
+# CSRF
+# ============================================================
+
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:1573",
     "http://localhost:5173",
@@ -178,31 +259,85 @@ CSRF_TRUSTED_ORIGINS = [
     "https://ryackson.alwaysdata.net",
 ]
 
+
 # ============================================================
 # M-PESA / DARAJA
 # ============================================================
-MPESA_ENV = env("MPESA_ENV", "sandbox")
-MPESA_CONSUMER_KEY = env("MPESA_CONSUMER_KEY", "")
-MPESA_CONSUMER_SECRET = env("MPESA_CONSUMER_SECRET", "")
-MPESA_SHORTCODE = env("MPESA_SHORTCODE", "174379")
-MPESA_PASSKEY = env("MPESA_PASSKEY", "")
+
+MPESA_ENV = env(
+    "MPESA_ENV",
+    "sandbox"
+)
+
+MPESA_CONSUMER_KEY = env(
+    "MPESA_CONSUMER_KEY",
+    ""
+)
+
+MPESA_CONSUMER_SECRET = env(
+    "MPESA_CONSUMER_SECRET",
+    ""
+)
+
+MPESA_SHORTCODE = env(
+    "MPESA_SHORTCODE",
+    "174379"
+)
+
+MPESA_PASSKEY = env(
+    "MPESA_PASSKEY",
+    ""
+)
+
 MPESA_CALLBACK_URL = env(
     "MPESA_CALLBACK_URL",
     "https://ryacksonfungo.alwaysdata.net/api/mpesa/callback/"
 )
-BOOKING_HOLD_MINUTES = int(env("BOOKING_HOLD_MINUTES", "15"))
+
+BOOKING_HOLD_MINUTES = int(
+    env("BOOKING_HOLD_MINUTES", "15")
+)
+
 
 # ============================================================
 # EMAIL
 # ============================================================
+
 EMAIL_BACKEND = env(
     "EMAIL_BACKEND",
     "django.core.mail.backends.smtp.EmailBackend"
 )
-EMAIL_HOST = env("EMAIL_HOST", "smtp.gmail.com")
-EMAIL_PORT = int(env("EMAIL_PORT", "587"))
-EMAIL_HOST_USER = env("EMAIL_HOST_USER", "")
-EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", "")
-EMAIL_USE_TLS = env("EMAIL_USE_TLS", "True") == "True"
-DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", "no-reply@dreampalace.example")
-ADMIN_NOTIFY_EMAIL = env("ADMIN_NOTIFY_EMAIL", "")
+
+EMAIL_HOST = env(
+    "EMAIL_HOST",
+    "smtp.gmail.com"
+)
+
+EMAIL_PORT = int(
+    env("EMAIL_PORT", "587")
+)
+
+EMAIL_HOST_USER = env(
+    "EMAIL_HOST_USER",
+    ""
+)
+
+EMAIL_HOST_PASSWORD = env(
+    "EMAIL_HOST_PASSWORD",
+    ""
+)
+
+EMAIL_USE_TLS = env(
+    "EMAIL_USE_TLS",
+    "True"
+) == "True"
+
+DEFAULT_FROM_EMAIL = env(
+    "DEFAULT_FROM_EMAIL",
+    "no-reply@dreampalace.example"
+)
+
+ADMIN_NOTIFY_EMAIL = env(
+    "ADMIN_NOTIFY_EMAIL",
+    ""
+)
