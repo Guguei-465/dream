@@ -2,7 +2,7 @@ import os
 
 os.environ.setdefault(
     "DJANGO_SETTINGS_MODULE",
-    "dream_palace_backend.settings"
+    "dream_palace.settings"
 )
 
 from django.core.wsgi import get_wsgi_application

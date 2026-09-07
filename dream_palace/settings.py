@@ -86,7 +86,6 @@ INSTALLED_APPS = [
 # ============================================================
 
 MIDDLEWARE = [
-    # CORS middleware must be near the top
     "corsheaders.middleware.CorsMiddleware",
 
     "django.middleware.security.SecurityMiddleware",
@@ -103,11 +102,11 @@ MIDDLEWARE = [
 # URL / APPLICATION
 # ============================================================
 
-ROOT_URLCONF = "dream_palace_backend.urls"
+ROOT_URLCONF = "dream_palace.urls"
 
-WSGI_APPLICATION = "dream_palace_backend.wsgi.application"
+WSGI_APPLICATION = "dream_palace.wsgi.application"
 
-ASGI_APPLICATION = "dream_palace_backend.asgi.application"
+ASGI_APPLICATION = "dream_palace.asgi.application"
 
 
 # ============================================================
