@@ -1,8 +1,8 @@
 import os
-import sys  # ✅ MUST HAVE — JUST LIKE LUMA!
+import sys  # ✅ MUST HAVE
 
-# ✅ THIS LINE IS THE MAGIC — TELLS PYTHON WHERE YOUR FILES ARE
-sys.path.append("/home/ryacksonfungo/dream_palace_backend")
+# ✅ THIS IS THE CORRECT PATH — FROM YOUR SSH SCREEN!
+sys.path.append("/home/ryacksonfungo/www/dream")
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dream_palace.settings")
 
